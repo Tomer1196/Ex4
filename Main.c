@@ -43,9 +43,10 @@ int main()
 	int numberOfStudents = 0;
 	char*** students = makeStudentArrayFromFile("studentList.txt", &coursesPerStudent, &numberOfStudents);
 
-	//printStudentArray(students, coursesPerStudent, numberOfStudents);
-	//factorGivenCourse(students, coursesPerStudent, numberOfStudents, "Complex Functions", +7);
-	//printStudentArray(students, coursesPerStudent, numberOfStudents);
+	printStudentArray(students, coursesPerStudent, numberOfStudents);
+	factorGivenCourse(students, coursesPerStudent, numberOfStudents, "Complex Functions", +7);
+	printf("-------After factor given !!!");
+	printStudentArray(students, coursesPerStudent, numberOfStudents);
 	//studentsToFile(students, coursesPerStudent, numberOfStudents); //this frees all memory. Part B fails if this line runs. uncomment for testing (and comment out Part B)
 
 	//test of func 1
@@ -308,16 +309,16 @@ Student* transformStudentArray(char*** students, const int* coursesPerStudent, i
 		{
 			StudentCourseGrade* pointer = (StudentCourseGrade*)malloc(sizeof(coursesPerStudent[i]));
 			strcpy(tempList->name, students[i][j]);
+			int k = 0;
 			j++;
-			while (j!=coursesPerStudent[i]*2)
+			while (j!=coursesPerStudent[i])
 			{
 				char* Tempcourse = (char*)malloc(sizeof(students[i][j]));
 				Tempcourse = students[i][j];
 				strcpy(pointer->courseName, Tempcourse);
 				int num = atof(students[i][++j]);
 				pointer->grade = num;
-				tempList->grades = pointer;
-				j++;
+				tempList->grades = &pointer;				
 			}
 
 		}
