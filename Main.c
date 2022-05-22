@@ -43,10 +43,10 @@ int main()
 	int numberOfStudents = 0;
 	char*** students = makeStudentArrayFromFile("studentList.txt", &coursesPerStudent, &numberOfStudents);
 
-	printStudentArray(students, coursesPerStudent, numberOfStudents);
+	//printStudentArray(students, coursesPerStudent, numberOfStudents);
 	//factorGivenCourse(students, coursesPerStudent, numberOfStudents, "Complex Functions", +7);
 	//printStudentArray(students, coursesPerStudent, numberOfStudents);
-	studentsToFile(students, coursesPerStudent, numberOfStudents); //this frees all memory. Part B fails if this line runs. uncomment for testing (and comment out Part B)
+	//studentsToFile(students, coursesPerStudent, numberOfStudents); //this frees all memory. Part B fails if this line runs. uncomment for testing (and comment out Part B)
 
 	//test of func 1
 	/*int amount = 0;
@@ -77,8 +77,8 @@ int main()
 
 
 		//Part B
-		/*Student* transformedStudents = transformStudentArray(students, coursesPerStudent, numberOfStudents);
-	writeToBinFile("students.bin", transformedStudents, numberOfStudents);
+	Student* transformedStudents = transformStudentArray(students, coursesPerStudent, numberOfStudents);
+	/*writeToBinFile("students.bin", transformedStudents, numberOfStudents);
 	Student* testReadStudents = readFromBinFile("students.bin");*/
 
 	//add code to free all arrays of struct Student
@@ -296,5 +296,33 @@ Student* readFromBinFile(const char* fileName)
 
 Student* transformStudentArray(char*** students, const int* coursesPerStudent, int numberOfStudents)
 {
-	//add code here
+	int numOfCourses = 0, numOfGrade = 0;
+	Student** List = (Student**)malloc(sizeof(Student) * numberOfStudents);
+	Student* tempList = (Student*)malloc(sizeof(Student) * numberOfStudents);
+	for (int i = 0; i < numberOfStudents; i++)
+	{
+		numOfCourses = coursesPerStudent[i];
+		tempList->numberOfCourses = numOfCourses;
+		tempList->grades = (StudentCourseGrade*)malloc(coursesPerStudent[i]);
+		for (int j = 0; j < coursesPerStudent[i]; j++)
+		{
+			StudentCourseGrade* pointer = (StudentCourseGrade*)malloc(sizeof(coursesPerStudent[i]));
+			strcpy(tempList->name, students[i][j]);
+			j++;
+			while (j!=coursesPerStudent[i]*2)
+			{
+				char* Tempcourse = (char*)malloc(sizeof(students[i][j]));
+				Tempcourse = students[i][j];
+				strcpy(pointer->courseName, Tempcourse);
+				int num = atof(students[i][++j]);
+				pointer->grade = num;
+				tempList->grades = pointer;
+				j++;
+			}
+
+		}
+		List[i] = tempList;
+	}
+	
+
 }
