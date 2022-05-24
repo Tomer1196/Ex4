@@ -44,10 +44,9 @@ int main()
 	char*** students = makeStudentArrayFromFile("studentList.txt", &coursesPerStudent, &numberOfStudents);
 
 	printStudentArray(students, coursesPerStudent, numberOfStudents);
-	factorGivenCourse(students, coursesPerStudent, numberOfStudents, "Complex Functions", +7);
-	printf("-------After factor given !!!");
-	printStudentArray(students, coursesPerStudent, numberOfStudents);
-	//studentsToFile(students, coursesPerStudent, numberOfStudents); //this frees all memory. Part B fails if this line runs. uncomment for testing (and comment out Part B)
+	//factorGivenCourse(students, coursesPerStudent, numberOfStudents, "Complex Functions", +7);
+	//printStudentArray(students, coursesPerStudent, numberOfStudents);
+	studentsToFile(students, coursesPerStudent, numberOfStudents); //this frees all memory. Part B fails if this line runs. uncomment for testing (and comment out Part B)
 
 	//test of func 1
 	/*int amount = 0;
@@ -57,8 +56,8 @@ int main()
 	amount = countPipes(str, maxLength);
 	printf("The symbol '|' appears %d times in this string\n", amount);*/
 
-	/*test of func 2
-	countStudentsAndCourses("studentList.txt", &coursesPerStudent, &numberOfStudents);
+	//test of func 2
+	/*countStudentsAndCourses("studentList.txt", &coursesPerStudent, &numberOfStudents);
 	printf("There are %d students in the file\n", numberOfStudents);
 	printf("The courses per student are:\n");
 	for (int i = 0; i < 9; i++) {
@@ -66,11 +65,11 @@ int main()
 	}*/
 
 	//test of func 3
-	/*int i = 0, j = 0, k = 0;*/
-	//int*** studentsARR = makeStudentArrayFromFile("studentList.txt", &coursesPerStudent, &numberOfStudents);
-	//printf("%s", studentsARR);
-	//printStudentArray(&studentsARR, &coursesPerStudent, &numberOfStudents);
-	/*printf("There are %d students in the file\n", numberOfStudents);
+	/*int i = 0, j = 0, k = 0;
+	int*** studentsARR = makeStudentArrayFromFile("studentList.txt", &coursesPerStudent, &numberOfStudents);
+	printf("%s", studentsARR);
+	printStudentArray(&studentsARR, &coursesPerStudent, &numberOfStudents);
+	printf("There are %d students in the file\n", numberOfStudents);
 	printf("The courses per student are:\n");
 	for (int i = 0; i < 9; i++) {
 		printf("%d   ", coursesPerStudent[i]);*/
@@ -78,8 +77,8 @@ int main()
 
 
 		//Part B
-	Student* transformedStudents = transformStudentArray(students, coursesPerStudent, numberOfStudents);
-	/*writeToBinFile("students.bin", transformedStudents, numberOfStudents);
+		/*Student* transformedStudents = transformStudentArray(students, coursesPerStudent, numberOfStudents);
+	writeToBinFile("students.bin", transformedStudents, numberOfStudents);
 	Student* testReadStudents = readFromBinFile("students.bin");*/
 
 	//add code to free all arrays of struct Student
@@ -193,13 +192,6 @@ char*** makeStudentArrayFromFile(const char* fileName, int** coursesPerStudent, 
 		studentCounter++;
 	}
 	fclose(fp);
-	//printStudentArray(Students, *coursesPerStudent, *numberOfStudents);
-	/*for (int i = 0; i < tempNum; i++) {
-		for (int k = 0; k < *(*coursesPerStudent+k) * 2 + 1; k++)
-			free(Students[i][k]);
-		free(Students[i]);
-	}
-	free(Students);*/
 	return Students;
 }
 
@@ -283,6 +275,12 @@ void studentsToFile(char*** students, int* coursesPerStudent, int numberOfStuden
 		fputs("\n", fp);
 	}
 	fclose(fp);
+	for (int i = 0; i < numberOfStudents; i++) {
+		for (int k = 0; k < coursesPerStudent[i] * 2; k++)
+			free(students[i][k]);
+		free(students[i]);
+	}
+	free(students); 
 }
 
 void writeToBinFile(const char* fileName, Student* students, int numberOfStudents)
@@ -297,33 +295,10 @@ Student* readFromBinFile(const char* fileName)
 
 Student* transformStudentArray(char*** students, const int* coursesPerStudent, int numberOfStudents)
 {
-	int numOfCourses = 0, numOfGrade = 0;
-	Student** List = (Student**)malloc(sizeof(Student) * numberOfStudents);
-	Student* tempList = (Student*)malloc(sizeof(Student) * numberOfStudents);
-	for (int i = 0; i < numberOfStudents; i++)
-	{
-		numOfCourses = coursesPerStudent[i];
-		tempList->numberOfCourses = numOfCourses;
-		tempList->grades = (StudentCourseGrade*)malloc(coursesPerStudent[i]);
-		for (int j = 0; j < coursesPerStudent[i]; j++)
-		{
-			StudentCourseGrade* pointer = (StudentCourseGrade*)malloc(sizeof(coursesPerStudent[i]));
-			strcpy(tempList->name, students[i][j]);
-			int k = 0;
-			j++;
-			while (j!=coursesPerStudent[i])
-			{
-				char* Tempcourse = (char*)malloc(sizeof(students[i][j]));
-				Tempcourse = students[i][j];
-				strcpy(pointer->courseName, Tempcourse);
-				int num = atof(students[i][++j]);
-				pointer->grade = num;
-				tempList->grades = &pointer;				
-			}
-
-		}
-		List[i] = tempList;
+	for (int i = 0; i < numberOfStudents; i++) {
+		for (int k = 0; k < coursesPerStudent[i] * 2; k++)
+			free(students[i][k]);
+		free(students[i]);
 	}
-	
-
+	free(students);
 }
