@@ -43,7 +43,7 @@ int main()
 	int numberOfStudents = 0;
 	char*** students = makeStudentArrayFromFile("studentList.txt", &coursesPerStudent, &numberOfStudents);
 
-	//printStudentArray(students, coursesPerStudent, numberOfStudents);
+	printStudentArray(students, coursesPerStudent, numberOfStudents);
 	//factorGivenCourse(students, coursesPerStudent, numberOfStudents, "Complex Functions", +7);
 	//printStudentArray(students, coursesPerStudent, numberOfStudents);
 	studentsToFile(students, coursesPerStudent, numberOfStudents); //this frees all memory. Part B fails if this line runs. uncomment for testing (and comment out Part B)
@@ -192,13 +192,6 @@ char*** makeStudentArrayFromFile(const char* fileName, int** coursesPerStudent, 
 		studentCounter++;
 	}
 	fclose(fp);
-	//printStudentArray(Students, *coursesPerStudent, *numberOfStudents);
-	/*for (int i = 0; i < tempNum; i++) {
-		for (int k = 0; k < *(*coursesPerStudent+k) * 2 + 1; k++)
-			free(Students[i][k]);
-		free(Students[i]);
-	}
-	free(Students);*/
 	return Students;
 }
 
@@ -302,5 +295,10 @@ Student* readFromBinFile(const char* fileName)
 
 Student* transformStudentArray(char*** students, const int* coursesPerStudent, int numberOfStudents)
 {
-	//add code here
+	for (int i = 0; i < numberOfStudents; i++) {
+		for (int k = 0; k < coursesPerStudent[i] * 2; k++)
+			free(students[i][k]);
+		free(students[i]);
+	}
+	free(students);
 }
