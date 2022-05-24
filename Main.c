@@ -43,7 +43,7 @@ int main()
 	int numberOfStudents = 0;
 	char*** students = makeStudentArrayFromFile("studentList.txt", &coursesPerStudent, &numberOfStudents);
 
-	printStudentArray(students, coursesPerStudent, numberOfStudents);
+	//printStudentArray(students, coursesPerStudent, numberOfStudents);
 	//factorGivenCourse(students, coursesPerStudent, numberOfStudents, "Complex Functions", +7);
 	//printStudentArray(students, coursesPerStudent, numberOfStudents);
 	studentsToFile(students, coursesPerStudent, numberOfStudents); //this frees all memory. Part B fails if this line runs. uncomment for testing (and comment out Part B)
@@ -56,8 +56,8 @@ int main()
 	amount = countPipes(str, maxLength);
 	printf("The symbol '|' appears %d times in this string\n", amount);*/
 
-	/*test of func 2
-	countStudentsAndCourses("studentList.txt", &coursesPerStudent, &numberOfStudents);
+	//test of func 2
+	/*countStudentsAndCourses("studentList.txt", &coursesPerStudent, &numberOfStudents);
 	printf("There are %d students in the file\n", numberOfStudents);
 	printf("The courses per student are:\n");
 	for (int i = 0; i < 9; i++) {
@@ -65,11 +65,11 @@ int main()
 	}*/
 
 	//test of func 3
-	/*int i = 0, j = 0, k = 0;*/
-	//int*** studentsARR = makeStudentArrayFromFile("studentList.txt", &coursesPerStudent, &numberOfStudents);
-	//printf("%s", studentsARR);
-	//printStudentArray(&studentsARR, &coursesPerStudent, &numberOfStudents);
-	/*printf("There are %d students in the file\n", numberOfStudents);
+	/*int i = 0, j = 0, k = 0;
+	int*** studentsARR = makeStudentArrayFromFile("studentList.txt", &coursesPerStudent, &numberOfStudents);
+	printf("%s", studentsARR);
+	printStudentArray(&studentsARR, &coursesPerStudent, &numberOfStudents);
+	printf("There are %d students in the file\n", numberOfStudents);
 	printf("The courses per student are:\n");
 	for (int i = 0; i < 9; i++) {
 		printf("%d   ", coursesPerStudent[i]);*/
@@ -282,6 +282,12 @@ void studentsToFile(char*** students, int* coursesPerStudent, int numberOfStuden
 		fputs("\n", fp);
 	}
 	fclose(fp);
+	for (int i = 0; i < numberOfStudents; i++) {
+		for (int k = 0; k < coursesPerStudent[i] * 2; k++)
+			free(students[i][k]);
+		free(students[i]);
+	}
+	free(students); 
 }
 
 void writeToBinFile(const char* fileName, Student* students, int numberOfStudents)
